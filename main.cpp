@@ -7,6 +7,24 @@ const int x = 9;
 const int y = 9;
 const int numMines = 10;
 
+int selectDifficulty() {
+  printw("Minesweeper \nchoose a difficulty [0-2]: \n");
+  switch(getch()){
+    case '0':
+      return 0;
+      break;
+    case '1':
+      return 1;
+      break;
+    case '2':
+      return 2;
+      break;
+    default:
+      return 0;
+      break;
+  }
+}
+
 void setupBoard(char board[x][y], bool visible[x][y]) {
   for(int i = 0; i < x; i++) {
     for(int j = 0; j < y; j++) {
@@ -36,7 +54,6 @@ void repositionMine(char board[x][y], int cursorX, int cursorY) {
   while(!mineMoved){
     int randX = rand() % x;
     int randY = rand() % y;
-
     if(randX != cursorX || randY != cursorY){
       if (board[randX][randY] != 'M') {
         board[randX][randY] = 'M';
@@ -78,7 +95,7 @@ void printBoard(char board[x][y], bool visible[x][y], bool flagged[x][y], int cu
         printw("%c ", board[i][j]);
       } 
       else if (flagged[i][j]) {
-        printw("f ");
+        printw("F ");
       }
       else {
         printw("# ");
@@ -115,6 +132,10 @@ void firstMove(char board[x][y], bool visible[x][y], int cursorX, int cursorY) {
 }
 
 int main(int argc, char** argv) {
+  initscr();
+  selectDifficulty();
+  endwin();
+  
   char board[x][y];
   bool visible[x][y];
   setupBoard(board, visible);
@@ -138,7 +159,7 @@ int main(int argc, char** argv) {
   }
 
   while(true) {
-    clear();
+    erase();
     printBoard(board, visible, flagged, cursorX, cursorY);
     int ch = getch();
     switch(ch) {
@@ -158,10 +179,17 @@ int main(int argc, char** argv) {
         if(cursorY < y - 1)
             cursorY++;
         break;
-      case 'z':
+      case 'd':
         if(start == true) {
           firstMove(board, visible, cursorX, cursorY);
           start = false;
+        }
+        if (board[cursorX][cursorY] == 'M') {
+          for(int i = 0; i < x; i++) {
+            for(int j = 0; j < y; j++) {
+              visible[i][j] = true;
+            }
+          }
         }
         else {
           visible[cursorX][cursorY] = true;
