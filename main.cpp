@@ -3,24 +3,46 @@
 #include <cstdlib>
 #include <ctime>
 
+// TODO: use a dynamic 2d array that doesn't rely on const
 const int x = 9;
 const int y = 9;
-const int numMines = 10;
+int numMines = 10;
 
-int selectDifficulty() {
-  printw("Minesweeper \nchoose a difficulty [0-2]: \n");
-  switch(getch()){
-    case '0':
-      return 0;
+// TODO: add functionality to the setDifficulty and selectDifficulty functions
+// switched const int numMines = 10 to int numMines = 10 for mutability
+void setDifficulty(int setting) {
+  switch(setting) {
+    // 9x9 10 mines
+    case 1:
+      numMines = 10;
       break;
-    case '1':
-      return 1;
+    // 16x16 40 mines
+    case 2:
+      numMines = 40;
       break;
-    case '2':
-      return 2;
+    // 16x30 99 mines
+    case 3:
+      numMines = 99;
       break;
     default:
-      return 0;
+      break;
+  }
+}
+
+void selectDifficulty() {
+  printw("Minesweeper \nchoose a difficulty [1-3]: \n");
+  switch(getch()){
+    case '1':
+      setDifficulty(1);
+      break;
+    case '2':
+      setDifficulty(2);
+      break;
+    case '3':
+      setDifficulty(3);
+      break;
+    default:
+      setDifficulty(1);
       break;
   }
 }
@@ -34,6 +56,7 @@ void setupBoard(char board[x][y], bool visible[x][y]) {
   }
 }
 
+// TODO: create better mine placement algorithm
 void placeMines(char board[x][y]) {
   srand(time(0));
   int minesPlaced = 0;
@@ -50,7 +73,7 @@ void placeMines(char board[x][y]) {
 void repositionMine(char board[x][y], int cursorX, int cursorY) {
   bool mineMoved = false;
   srand(time(0));
-  
+
   while(!mineMoved){
     int randX = rand() % x;
     int randY = rand() % y;
@@ -108,6 +131,7 @@ void printBoard(char board[x][y], bool visible[x][y], bool flagged[x][y], int cu
   }
 }
 
+// TODO: test first move function
 void firstMove(char board[x][y], bool visible[x][y], int cursorX, int cursorY) {
   int offsetX[9] = {0, 0, 0, 1, -1, 1, -1, 1, -1};
   int offsetY[9] = {0, 1, -1, 0, 0, 1, 1, -1, -1};
@@ -132,10 +156,12 @@ void firstMove(char board[x][y], bool visible[x][y], int cursorX, int cursorY) {
 }
 
 int main(int argc, char** argv) {
+  /*
   initscr();
   selectDifficulty();
   endwin();
-  
+  */
+
   char board[x][y];
   bool visible[x][y];
   setupBoard(board, visible);
@@ -184,14 +210,14 @@ int main(int argc, char** argv) {
           firstMove(board, visible, cursorX, cursorY);
           start = false;
         }
-        if (board[cursorX][cursorY] == 'M') {
+        if (board[cursorX][cursorY] == 'M' & !flagged[cursorX][cursorY]) {
           for(int i = 0; i < x; i++) {
             for(int j = 0; j < y; j++) {
               visible[i][j] = true;
             }
           }
         }
-        else {
+        if (!visible[cursorX][cursorY] & !flagged[cursorX][cursorY]) {
           visible[cursorX][cursorY] = true;
         }
         break;
