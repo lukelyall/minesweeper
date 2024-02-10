@@ -2,26 +2,30 @@
 #include <ncurses.h>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
 
-// TODO: use a dynamic 2d array that doesn't rely on const
-const int x = 9;
-const int y = 9;
+int x = 9;
+int y = 9;
 int numMines = 10;
 
-// TODO: add functionality to the setDifficulty and selectDifficulty functions
-// switched const int numMines = 10 to int numMines = 10 for mutability
 void setDifficulty(int setting) {
   switch(setting) {
     // 9x9 10 mines
     case 1:
+      x = 9;
+      y = 9;
       numMines = 10;
       break;
     // 16x16 40 mines
     case 2:
+      x = 16;
+      y = 16;
       numMines = 40;
       break;
     // 16x30 99 mines
     case 3:
+      x = 16;
+      y = 30;
       numMines = 99;
       break;
     default:
@@ -47,17 +51,8 @@ void selectDifficulty() {
   }
 }
 
-void setupBoard(char board[x][y], bool visible[x][y]) {
-  for(int i = 0; i < x; i++) {
-    for(int j = 0; j < y; j++) {
-      board[i][j] = '.';
-      visible[i][j] = false;
-    }
-  }
-}
-
 // TODO: create better mine placement algorithm
-void placeMines(char board[x][y]) {
+void placeMines(std::vector<std::vector<char>>&board) {
   srand(time(0));
   int minesPlaced = 0;
   while (minesPlaced < numMines) {
@@ -70,7 +65,8 @@ void placeMines(char board[x][y]) {
   }
 }
 
-void repositionMine(char board[x][y], int cursorX, int cursorY) {
+
+void repositionMine(std::vector<std::vector<char>>&board, int cursorX, int cursorY) {
   bool mineMoved = false;
   srand(time(0));
 
@@ -86,7 +82,8 @@ void repositionMine(char board[x][y], int cursorX, int cursorY) {
   }
 }
 
-void placeNumbers(char board[x][y], int x, int y) {
+
+void placeNumbers(std::vector<std::vector<char>>&board, int x, int y) {
   int offsetX[8] = {0, 0, 1, -1, 1, -1, 1, -1};
   int offsetY[8] = {1, -1, 0, 0, 1, 1, -1, -1};
   int numOffsets = sizeof(offsetX) / sizeof(offsetX[0]);
@@ -108,7 +105,7 @@ void placeNumbers(char board[x][y], int x, int y) {
   }
 }
 
-void printBoard(char board[x][y], bool visible[x][y], bool flagged[x][y], int cursorX, int cursorY) {
+void printBoard(std::vector<std::vector<char>>&board, std::vector<std::vector<bool>>&visible, std::vector<std::vector<bool>>&flagged, int cursorX, int cursorY) {
   for(int i = 0; i < x; i++) {
     for(int j = 0; j < y; j++) {
       if (i == cursorX && j == cursorY) {
@@ -131,8 +128,9 @@ void printBoard(char board[x][y], bool visible[x][y], bool flagged[x][y], int cu
   }
 }
 
+
 // TODO: test first move function
-void firstMove(char board[x][y], bool visible[x][y], int cursorX, int cursorY) {
+void firstMove(std::vector<std::vector<char>>&board, std::vector<std::vector<bool>>&visible, int cursorX, int cursorY) {
   int offsetX[9] = {0, 0, 0, 1, -1, 1, -1, 1, -1};
   int offsetY[9] = {0, 1, -1, 0, 0, 1, 1, -1, -1};
   int numOffsets = sizeof(offsetX) / sizeof(offsetX[0]);
@@ -156,19 +154,18 @@ void firstMove(char board[x][y], bool visible[x][y], int cursorX, int cursorY) {
 }
 
 int main(int argc, char** argv) {
-  /*
   initscr();
   selectDifficulty();
   endwin();
-  */
 
-  char board[x][y];
-  bool visible[x][y];
-  setupBoard(board, visible);
+  std::vector<std::vector<char>> board(x, std::vector<char>(y, '.'));
+  std::vector<std::vector<bool>> visible(x, std::vector<bool>(y, false));
+  std::vector<std::vector<bool>> flagged(x, std::vector<bool>(y, false));
+
+  bool start = true;
+
   placeMines(board);
   placeNumbers(board, x, y);
-  bool start = true;
-  bool flagged[x][y];
 
   initscr();
   cbreak();
@@ -178,11 +175,9 @@ int main(int argc, char** argv) {
   int cursorX = 0;
   int cursorY = 0;
 
-  for (int i = 0; i < x; ++i) {
-    for (int j = 0; j < y; ++j) {
-      flagged[i][j] = false;
-    }
-  }
+  board.resize(x, std::vector<char>(y, '.'));
+  visible.resize(x, std::vector<bool>(y, false));
+  flagged.resize(x, std::vector<bool>(y, false));
 
   while(true) {
     erase();
