@@ -1,4 +1,4 @@
-#include "board.h"
+#include "../includes/board.h"
 
 // TODO: create better mine placement algorithm
 void placeMines(std::vector<std::vector<char>>&board, int x, int y, int numMines) {

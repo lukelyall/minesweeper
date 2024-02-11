@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/lukel/Desktop/minesweeper",
-      "program": "c:/Users/lukel/Desktop/minesweeper/build/Debug/outDebug",
+      "cwd": "c:/Users/lukel/Desktop/minesweeper/src",
+      "program": "c:/Users/lukel/Desktop/minesweeper/src/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -1,4 +1,4 @@
-#include "settings.h"
+#include "../includes/settings.h"
 
 int x = 9;
 int y = 9;

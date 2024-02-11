@@ -1,4 +1,4 @@
-#include "logic.h"
+#include "../includes/logic.h"
 
 void repositionMine(std::vector<std::vector<char>>&board, int x, int y, int cursorX, int cursorY) {
   bool mineMoved = false;

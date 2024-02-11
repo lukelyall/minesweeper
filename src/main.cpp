@@ -1,6 +1,6 @@
-#include "board.h"
-#include "settings.h"
-#include "logic.h"
+#include "../includes/board.h"
+#include "../includes/logic.h"
+#include "../includes/settings.h"
 
 #include <iostream>
 
