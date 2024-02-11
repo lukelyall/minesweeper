@@ -1,4 +1,5 @@
 # Terminal Minesweeper
+![image](https://github.com/lukelyall/minesweeper/assets/109260451/3d525d5a-a7b6-4597-85bd-0a5e9e075088)   
 A terminal-based Minesweeper clone made with C++ and utilizing the ncurses library. 
 ## Controls
 The game uses the arrow keys to navigate the board, 'd' to reveal mines, 'f' to flag potential mines, and 'q' to exit. If a mine is revealed then the game ends.
