@@ -1,4 +1,3 @@
-
 # Terminal Minesweeper
 A terminal-based Minesweeper clone made with C++ and utilizing the ncurses library. 
 ## Controls
